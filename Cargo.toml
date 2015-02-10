@@ -8,5 +8,5 @@ authors = ["Luke Metz <luke.metz@students.olin.edu>"]
 git = "https://github.com/sebcrozet/nalgebra.git"
 
 [dependencies.stl]
-path="../../rust-stl"
+path="../rust-stl"
 
