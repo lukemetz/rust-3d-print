@@ -1,5 +1,7 @@
 extern crate stl;
-use na::{Vec3, Vec4, Pnt3, Mat4};
+
+use std::ops::{Add, Sub, Mul, Div, Index, IndexMut};
+use na::{Vec3, Vec4, Rot3, Pnt3, Mat4, Eye, Zero, Mat, ToHomogeneous};
 use na::cross;
 use std::old_io::{File, IoResult};
 
@@ -123,6 +125,54 @@ impl World {
         };
         let mut file = File::create(path);
         stl::write_stl(&mut file, &stl_file)
+    }
+}
+pub trait Transform {
+    fn eye() -> Self;
+    fn translate(&self, translate: Vec3<f32>) -> Self;
+    fn scale(&self, scale: Vec3<f32>) -> Self;
+    fn rotate(&self, axisAngle: Vec3<f32>) -> Self;
+}
+
+fn test() {
+    let trans : Mat4<f32> = Zero::zero();
+    let mut t2 : Mat4<f32> = Zero::zero();
+    println!("{:?}", t2 + trans);
+}
+
+impl Transform for Mat4<f32> {
+    fn eye() -> Mat4<f32> {
+        Eye::new_identity(4)
+    }
+
+    fn translate(&self, translate: Vec3<f32>) -> Mat4<f32> {
+        let mut trans : Mat4<f32> = Zero::zero();
+        trans[(0, 3)] = translate.x;
+        trans[(1, 3)] = translate.y;
+        trans[(2, 3)] = translate.z;
+
+        trans + (*self)
+    }
+
+    fn scale(&self, scale: Vec3<f32>) -> Mat4<f32> {
+        let mut s = self.clone();
+        s[(0, 0)] *= scale.x;
+        s[(1, 0)] *= scale.x;
+        s[(2, 0)] *= scale.x;
+
+        s[(0, 1)] *= scale.y;
+        s[(1, 1)] *= scale.y;
+        s[(2, 1)] *= scale.y;
+
+        s[(0, 2)] *= scale.z;
+        s[(1, 2)] *= scale.z;
+        s[(2, 2)] *= scale.z;
+        s
+    }
+
+    fn rotate(&self, axisangle: Vec3<f32>) -> Mat4<f32> {
+        let mat = Rot3::new(axisangle).to_homogeneous();
+        (*self) * mat
     }
 }
 
