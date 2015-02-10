@@ -1,0 +1,9 @@
+
+fn make() {
+  w = World()
+  let v = Box(pos, size, transform.translate.rotate)
+  w.add(v)
+
+  w.renderStl()
+
+}

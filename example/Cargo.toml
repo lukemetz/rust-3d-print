@@ -1,0 +1,11 @@
+[package]
+
+name = "example"
+version = "0.0.1"
+authors = ["Luke Metz <luke.metz@students.olin.edu>"]
+
+[dependencies.rust-model]
+path="../"
+
+[dependencies.nalgebra]
+git = "https://github.com/sebcrozet/nalgebra.git"
