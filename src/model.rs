@@ -172,7 +172,7 @@ impl Transform for Mat4<f32> {
 
     fn rotate(&self, axisangle: Vec3<f32>) -> Mat4<f32> {
         let mat = Rot3::new(axisangle).to_homogeneous();
-        (*self) * mat
+        mat * (*self)
     }
 }
 
