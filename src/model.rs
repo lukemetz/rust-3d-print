@@ -66,14 +66,18 @@ impl Cuboid {
     }
 
     pub fn to_mesh(&self) -> Mesh {
-        let p1 = Pnt3::new(-1., -1., -1.);
-        let p2 = Pnt3::new(-1., 1., -1.);
-        let p3 = Pnt3::new(1., 1., -1.);
-        let p4 = Pnt3::new(1., -1., -1.);
-        let p5 = Pnt3::new(1., -1., 1.);
-        let p6 = Pnt3::new(-1., -1., 1.);
-        let p7 = Pnt3::new(-1., 1., 1.);
-        let p8 = Pnt3::new(1., 1., 1.);
+        let s1 = self.size.x;
+        let s2 = self.size.y;
+        let s3 = self.size.z;
+
+        let p1 = Pnt3::new(-1.*s1, -1.*s2, -1.*s3);
+        let p2 = Pnt3::new(-1.*s1, 1.* s2, -1.*s3);
+        let p3 = Pnt3::new(1.* s1, 1.* s2, -1.*s3);
+        let p4 = Pnt3::new(1.* s1, -1.*s2, -1.*s3);
+        let p5 = Pnt3::new(1.* s1, -1.*s2, 1.*s3);
+        let p6 = Pnt3::new(-1.*s1, -1.*s2, 1.*s3);
+        let p7 = Pnt3::new(-1.*s1, 1.* s2, 1.*s3);
+        let p8 = Pnt3::new(1.* s1, 1.* s2, 1.*s3);
 
         let tris = vec!(
             Tri::new(&p2, &p3, &p1),

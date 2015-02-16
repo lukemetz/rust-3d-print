@@ -1,27 +1,37 @@
 extern crate "rust-model" as model;
 extern crate "nalgebra" as na;
 
-use model::{Cuboid, World, Transform};
-use na::{Vec3, Pnt3, Eye, Mat4};
+use model::{Cuboid, World, Transform, space_colonize};
+use na::{Vec3, Pnt3, Eye, Mat4, FloatPnt};
+use std::rand;
 
 fn main() {
-    let cube = Cuboid::new(Vec3::new(0.0, 0.0, 0.0), Eye::new_identity(4));
-    let mut mat : Mat4<f32> = Eye::new_identity(4);
-    mat[(0, 3)] = 3.0;
-    mat[(3, 0)] = 3.0;
-    let cube2 = Cuboid::new(Vec3::new(0.0, 0.0, 0.0), mat);
     let mut world = World::new();
-    world.add_cube(cube);
-    world.add_cube(cube2);
 
-    for x in range(0, 30) {
+    let mut dest_pnts = vec!();
+    for k in range(0, 2000) {
+        //dest_pnts.push(Pnt3::new(k as f32, k as f32, 0.0));
+        let pnt : Pnt3<f32> = (std::rand::random::<Pnt3<f32>>() - 0.5) * 10.0;
+        let circle = pnt.dist(&Pnt3::new(0.0, 0.0, 0.0));
+        if circle >= 4.5 && circle < 5.0 {
+            dest_pnts.push(pnt)
+        }
+    }
+
+    let mut src_pnts = vec!(Pnt3::new(0.0, 0.0, 0.0));
+    //for k in range(0, 4) {
+        //src_pnts.push(Pnt3::new(k as f32, -1.0, 0.0));
+    //}
+
+    let render_pnts = space_colonize(&src_pnts, &dest_pnts, 0.1, 0.2);
+    for pnt in render_pnts {
         let t : Mat4<f32> = Transform::eye();
-        let t = t.rotate(Vec3::new(1.0, 0.0, 0.0) * 1.3 * (x as f32))
-            .translate(Vec3::new(1.1 * (x as f32), 0.0, 0.0))
-            .scale(Vec3::new(1.0, 1.0, 1.0));
-        let cube = Cuboid::new(Vec3::new(0.0, 0.0, 0.0), t);
+        let t = t.scale(Vec3::new(0.1, 0.1, 0.1))
+            .translate(pnt.to_vec());
+        let cube = Cuboid::new(Vec3::new(0.5, 0.5, 0.5), t);
         world.add_cube(cube);
     }
+
 
     println!("Hello, world!");
     println!("{:?}", world);
